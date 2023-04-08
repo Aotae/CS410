@@ -8,23 +8,24 @@ public class PlayerController : MonoBehaviour
     public float speed = 0;
     public float jumpForce = 10;
     public float numJumps = 2;
-    public int scoreval = 0;
+    private int scoreval;
     public TMPro.TMP_Text score;
     private Rigidbody rb;
     private float movementX;
     private float movementY;
     private bool grounded = true;
     private int JumpsUsed = 0;
-
+    public GameObject winTextObject;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
+        winTextObject.SetActive(false);
+        scoreval = 0;
     }
     private void Update()
     {
-        score.SetText("Score:" + scoreval);
+
     }
 
     private void OnMove(InputValue movementValue)
@@ -67,11 +68,17 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             scoreval += 200;
+            score.SetText("Score:" + scoreval);
             Destroy(other.gameObject);
+            if(scoreval >= 2000)
+            {
+                winTextObject.SetActive(true);
+            }
         }
         if (other.gameObject.CompareTag("BadPickUp"))
         {
             scoreval -= 200;
+            score.SetText("Score:" + scoreval);
             Destroy(other.gameObject);
         }
     }
